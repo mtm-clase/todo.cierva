@@ -1,4 +1,4 @@
-const url = 'http://todo.ingeniero.cierva/php/controller.php';
+const url = 'http://todo.ingeniero.cierva/controller.php';
 
 async function load_list() {
     const table = document.getElementById("table");
