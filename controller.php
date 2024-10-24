@@ -23,20 +23,17 @@
     }
 
     function handlePOST($bodyRequest) {
-        // if ($_POST['content'] == null || $_POST['content'] == '' ) {
-        //     echo json_encode(['message' => 'Invalid content']);
-        //     exit;
-        // }
-        $dbconn = new DB();
+        $db = new DB();
         $new_task = new Todo;
         $new_task -> jsonConstruct($bodyRequest);
-        $new_task -> DB_insert($dbconn);
-        return_response(200, "Todo está ok", $todo_list);
+        $new_task -> DB_insert($db->connection);
+        $todo_list=Todo::DB_selectAll($db->connection);
+        return_response(200, "OK", $todo_list);
     }
 
     function handleGET() {
-        $dbconn = new DB();
-        $result=Todo::DB_selectAll($dbconn->connection);
-        return_response(200, "Todo está ok", $result);
+        $db = new DB();
+        $result=Todo::DB_selectAll($db->connection);
+        return_response(200, "OK", $result);
     }
 ?>

@@ -11,8 +11,5 @@ class DB {
     public function __destruct() {
         $this-> connection = null;
     }
-    public function query($sql) {
-        return $this->connection->query($sql);
-    }
 }
 ?>

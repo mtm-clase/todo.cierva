@@ -29,10 +29,11 @@ class Todo implements \JsonSerializable {
         return $todo_list;
     }
 
-    public function DB_insert($db) {
+    public function DB_insert($dbconn) {
         $task=$this->content;
-        $sql = "INSERT INTO `todo_list` (content) VALUES('$task')";
-        if (!($db->query($sql) === TRUE)) {
+        $sql = "INSERT INTO `todo_list` (content) VALUES(?)";
+        $stmt = $dbconn->prepare($sql);
+        if (!($stmt->execute([$task]) === TRUE)) {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
     }

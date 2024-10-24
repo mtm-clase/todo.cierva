@@ -1,22 +1,23 @@
 const url = 'http://todo.ingeniero.cierva/controller.php';
 
-async function load_list() {
+function printList(list) {
     const table = document.getElementById("table");
     table.innerHTML = '';
+    const ul = document.createElement('ul');
+    list.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item.content;
+        ul.appendChild(li);
+    });
+    table.appendChild(ul);
+}
+
+async function load_list() {
     try {
-        const table = document.getElementById("table");
         const request = new Request(url, {method: "GET", headers: {'Content-Type': 'application/json'} } )
         let response=await fetch(request);
         const jsonData=JSON.parse(await response.text());
-        console.log(jsonData);
-        const ul = document.createElement('ul');
-
-        jsonData.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item.content;
-            ul.appendChild(li);
-        });
-        table.appendChild(ul);
+        printList(jsonData);
     } 
     catch(error) {
             console.error('Error al cargar:', error);
@@ -41,9 +42,9 @@ async function upload() {
         body: JSON.stringify(json_task)}
     )
 
-    const response1 = await fetch(request);
-    console.log(response1);
-    load_list();
+    const response = await fetch(request);
+    const jsonData = JSON.parse(await response.text());
+    printList(jsonData);
 }
 
 document.addEventListener('DOMContentLoaded', load_list);
