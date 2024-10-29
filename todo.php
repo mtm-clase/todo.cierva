@@ -37,5 +37,13 @@ class Todo implements \JsonSerializable {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
     }
+    public function DB_delete($dbconn) {
+        $task_id=$this->item_id;
+        $sql = "DELETE FROM todo_list WHERE item_id=?";
+        $stmt = $dbconn->prepare($sql);
+        if (!($stmt->execute([$task_id]) === TRUE)) {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
 }
 ?>

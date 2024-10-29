@@ -6,7 +6,7 @@ function printList(list) {
     const ul = document.createElement('ul');
     list.forEach(item => {
         const li = document.createElement('li');
-        li.textContent = item.content;
+        li.innerHTML = item.content + ' <button onclick=delete_item(' + item.item_id + ')>Delete</button>'
         ul.appendChild(li);
     });
     table.appendChild(ul);
@@ -36,6 +36,22 @@ async function upload() {
 
     const request = new Request(url, {
         method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(json_task)}
+    )
+
+    const response = await fetch(request);
+    const jsonData = JSON.parse(await response.text());
+    printList(jsonData);
+}
+
+async function delete_item($item_id) {
+    const json_task = {'item_id': $item_id};
+    console.log(json_task)
+    const request = new Request(url, {
+        method: "DELETE",
         headers: {
             'Content-Type': 'application/json'
         },

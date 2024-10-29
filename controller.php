@@ -17,6 +17,9 @@
         case 'POST':
             handlePOST($bodyRequest);
             break;
+        case 'DELETE':
+            handleDELETE($bodyRequest);
+            break;
         default:
             echo json_encode(['message' => 'Invalid request method']);
             break;
@@ -35,5 +38,14 @@
         $db = new DB();
         $result=Todo::DB_selectAll($db->connection);
         return_response(200, "OK", $result);
+    }
+
+    function handleDELETE($bodyRequest) {
+        $db = new DB();
+        $new_task = new Todo;
+        $new_task -> jsonConstruct($bodyRequest);
+        $new_task -> DB_delete($db->connection);
+        $todo_list=Todo::DB_selectAll($db->connection);
+        return_response(200, "OK", $todo_list);
     }
 ?>
