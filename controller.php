@@ -17,6 +17,9 @@
         case 'POST':
             handlePOST($bodyRequest);
             break;
+        case 'PUT':
+            handlePUT($bodyRequest);
+            break;
         case 'DELETE':
             handleDELETE($bodyRequest);
             break;
@@ -30,6 +33,15 @@
         $new_task = new Todo;
         $new_task -> jsonConstruct($bodyRequest);
         $new_task -> DB_insert($db->connection);
+        $todo_list=Todo::DB_selectAll($db->connection);
+        return_response(200, "OK", $todo_list);
+    }
+
+    function handlePUT($bodyRequest) {
+        $db = new DB();
+        $newTask = new Todo;
+        $newTask -> jsonConstruct($bodyRequest);
+        $newTask -> DB_modify($db->connection);
         $todo_list=Todo::DB_selectAll($db->connection);
         return_response(200, "OK", $todo_list);
     }

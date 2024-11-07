@@ -21,7 +21,7 @@ class Todo implements \JsonSerializable {
 
     public static function DB_selectAll($dbconn){
         $todo_list = array();
-        foreach($dbconn->query("SELECT item_id, content FROM todo_list") as $row) {
+        foreach($dbconn->query("SELECT item_id, content FROM todo_list ORDER BY item_id") as $row) {
             $new_todo = new Todo;
             $new_todo->parametersConstruct($row['item_id'],$row['content']);
             $todo_list[]=$new_todo;
@@ -37,6 +37,17 @@ class Todo implements \JsonSerializable {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
     }
+
+    public function DB_modify($dbconn) {
+        $task=$this->content;
+        $id=$this->item_id;
+        $sql = "UPDATE todo_list SET content = (?) WHERE item_id=(?)";
+        $stmt = $dbconn->prepare($sql);
+        if (!($stmt->execute([$task, $id]) === TRUE)) {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
+
     public function DB_delete($dbconn) {
         $task_id=$this->item_id;
         $sql = "DELETE FROM todo_list WHERE item_id=?";

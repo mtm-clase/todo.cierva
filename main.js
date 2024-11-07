@@ -6,7 +6,13 @@ function printList(list) {
     const ul = document.createElement('ul');
     list.forEach(item => {
         const li = document.createElement('li');
-        li.innerHTML = item.content + ' <button onclick=delete_item(' + item.item_id + ')>Delete</button>'
+        li.innerHTML = item.item_id+ '. ' + item.content + ' <button onclick=delete_item(' + item.item_id + ')>Delete</button>'
+        li.addEventListener('click', () => {
+            const newTask = prompt('Nuevo texto:', item.content);
+            if (newTask !== null) {
+                editTask(item.item_id, newTask);
+            }
+        })
         ul.appendChild(li);
     });
     table.appendChild(ul);
@@ -56,6 +62,21 @@ async function delete_item($item_id) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(json_task)}
+    )
+
+    const response = await fetch(request);
+    const jsonData = JSON.parse(await response.text());
+    printList(jsonData);
+}
+
+async function editTask(item_id, task) {
+    const json = {'item_id': item_id, 'content': task};
+    const request = new Request(url, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(json)}
     )
 
     const response = await fetch(request);
